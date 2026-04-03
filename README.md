@@ -12,6 +12,10 @@ Built in the TopGUI design language: dark navy glassmorphic background, floating
 
 ---
 
+![Nova Dashboard](docs/nova-dashboard.png)
+
+---
+
 ## What It Monitors
 
 ### OpenClaw Core
