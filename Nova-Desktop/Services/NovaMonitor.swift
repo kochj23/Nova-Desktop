@@ -149,17 +149,25 @@ class NovaMonitor: ObservableObject {
     private func probeOpenClaw() async -> OpenClawStatus {
         var status = OpenClawStatus()
 
-        // Gateway — check via HTTP status endpoint
-        if let (data, _) = try? await session.data(from: URL(string: "http://127.0.0.1:18789/status")!),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-            status.gatewayOnline   = true
-            status.gatewayVersion  = json["version"] as? String ?? "online"
-            status.activeSessions  = json["sessions"] as? Int ?? 0
-            status.currentModel    = json["model"] as? String ?? "—"
-        } else {
-            // Fallback: check via openclaw CLI
-            let result = shell("openclaw status --json 2>/dev/null | head -1")
-            status.gatewayOnline = result.contains("\"online\"") || result.contains("ready")
+        // Gateway — /health returns {"ok":true,"status":"live"}
+        if let (data, _) = try? await session.data(from: URL(string: "http://127.0.0.1:18789/health")!),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           json["ok"] as? Bool == true {
+            status.gatewayOnline = true
+            status.gatewayVersion = json["status"] as? String ?? "live"
+        }
+        // Enrich with openclaw CLI for session/model data
+        if status.gatewayOnline {
+            let cliOut = shell("openclaw status 2>/dev/null")
+            if let sessLine = cliOut.components(separatedBy: "\n").first(where: { $0.contains("sessions") }),
+               let numStr = sessLine.components(separatedBy: " ").first(where: { Int($0) != nil }),
+               let n = Int(numStr) { status.activeSessions = n }
+            if let modelLine = cliOut.components(separatedBy: "\n").first(where: { $0.contains("default") && $0.contains("/") }) {
+                let parts = modelLine.components(separatedBy: " ")
+                if let modelIdx = parts.firstIndex(where: { $0.contains("/") }) {
+                    status.currentModel = parts[modelIdx]
+                }
+            }
         }
 
         // Memory server
