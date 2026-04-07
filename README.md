@@ -20,7 +20,7 @@ Built in the TopGUI design language: dark navy glassmorphic background, floating
 
 ### OpenClaw Core
 - **Gateway** (ws://18789) — online status, version, active sessions, current model, Slack connectivity
-- **Memory Server** (18790) — online status, memories count
+- **Memory Server (18790) — status, memories count (106K+, PostgreSQL+pgvector)
 - **25 cron jobs** — status (ok/error/running/skipped), last run, next run, consecutive error count
 
 ### AI Model Services
@@ -31,7 +31,7 @@ Built in the TopGUI design language: dark navy glassmorphic background, floating
 | **OpenRouter** | cloud | API reachability, latency |
 | **Open WebUI** | 3000/8080 | Running status |
 | **TinyChat** | 5000 | Running status |
-| **SwarmUI** | 7801 | Running status |
+| **SwarmUI** | 7802 | Running status |
 | **ComfyUI** | 8188 | Running status, VRAM |
 
 ### Jordan's Apps
