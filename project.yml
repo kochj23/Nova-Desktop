@@ -23,3 +23,14 @@ targets:
       INFOPLIST_KEY_CFBundleDisplayName: "Nova Desktop"
       MARKETING_VERSION: "1.0.0"
       CURRENT_PROJECT_VERSION: "1"
+  Nova-DesktopTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [Nova-DesktopTests]
+    dependencies:
+      - target: Nova-Desktop
+    settings:
+      BUNDLE_IDENTIFIER: net.digitalnoise.Nova-DesktopTests
+      GENERATE_INFOPLIST_FILE: YES
+      TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Nova-Desktop.app/Contents/MacOS/Nova-Desktop"
+      BUNDLE_LOADER: "$(TEST_HOST)"

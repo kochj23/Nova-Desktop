@@ -69,6 +69,13 @@ class NovaMonitor: ObservableObject {
                 id: "comfyui", name: "ComfyUI", icon: "photo.on.rectangle.angled", port: 8188,
                 openAction: .openURL(url: "http://127.0.0.1:8188")
             ),
+            MonitoredService(
+                id: "redis", name: "Redis", icon: "cylinder.split.1x2.fill", port: 6379
+            ),
+            MonitoredService(
+                id: "novanextgen", name: "Nova-NextGen", icon: "arrow.triangle.branch", port: 34750,
+                openAction: .openURL(url: "http://127.0.0.1:34750")
+            ),
         ]
 
         apps = [
@@ -173,8 +180,24 @@ class NovaMonitor: ObservableObject {
         // Memory server
         if let (data, _) = try? await session.data(from: URL(string: "http://127.0.0.1:18790/health")!),
            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-            status.memoryServerOnline = true
-            status.memoriesCount      = json["total_chunks"] as? Int ?? json["count"] as? Int ?? 0
+            status.memoryServerOnline    = true
+            status.memoriesCount         = json["total_chunks"] as? Int ?? json["count"] as? Int ?? 0
+            status.memoryBackend         = json["backend"] as? String ?? "postgresql+pgvector"
+            status.memoryQueueDepth      = json["queue_length"] as? Int ?? 0
+        }
+        // Memory /search endpoint
+        if let (_, resp) = try? await session.data(from: URL(string: "http://127.0.0.1:18790/search?q=test&n=1")!),
+           (resp as? HTTPURLResponse)?.statusCode ?? 0 < 500 {
+            status.memorySearchEndpoint = true
+        }
+        // Redis queue
+        if let (_, resp) = try? await session.data(from: URL(string: "http://127.0.0.1:6379")!),
+           (resp as? HTTPURLResponse) != nil {
+            status.redisOnline = true
+        } else {
+            // TCP-level check for Redis (it doesn't speak HTTP)
+            let redisCheck = shell("redis-cli ping 2>/dev/null")
+            status.redisOnline = redisCheck.trimmingCharacters(in: .whitespacesAndNewlines) == "PONG"
         }
 
         // Cron jobs via openclaw CLI
@@ -311,6 +334,27 @@ class NovaMonitor: ObservableObject {
                 } else { svc.detail = "running" }
             } else { svc.state = .offline; svc.detail = "not running" }
 
+        case "redis":
+            let ping = shell("redis-cli ping 2>/dev/null").trimmingCharacters(in: .whitespacesAndNewlines)
+            if ping == "PONG" {
+                svc.state = .online
+                let info = shell("redis-cli info server 2>/dev/null")
+                if let versionLine = info.components(separatedBy: "\n").first(where: { $0.contains("redis_version") }) {
+                    svc.detail = "v" + (versionLine.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "?")
+                } else { svc.detail = "online" }
+            } else { svc.state = .offline; svc.detail = "not running" }
+
+        case "novanextgen":
+            if let (data, _) = try? await session.data(from: URL(string: "http://127.0.0.1:34750/api/ai/backends")!) {
+                svc.state = .online
+                svc.latencyMs = Int(Date().timeIntervalSince(start) * 1000)
+                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let backends = json["backends"] as? [[String: Any]] {
+                    let activeCount = backends.filter { $0["available"] as? Bool == true }.count
+                    svc.detail = "\(activeCount)/\(backends.count) backends"
+                } else { svc.detail = "online" }
+            } else { svc.state = .offline; svc.detail = "not running" }
+
         default:
             if let port = svc.port,
                let (_, resp) = try? await session.data(from: URL(string: "http://127.0.0.1:\(port)/")!),
@@ -411,7 +455,7 @@ class NovaMonitor: ObservableObject {
     // MARK: - GitHub
 
     func refreshGitHub() async {
-        let repos = ["kochj23/nova", "kochj23/NovaControl", "kochj23/MLXCode", "kochj23/NMAPScanner",
+        let repos = ["kochj23/nova", "kochj23/Nova-Desktop", "kochj23/NovaControl", "kochj23/MLXCode", "kochj23/NMAPScanner",
                      "kochj23/RsyncGUI", "kochj23/JiraSummary"]
         var results: [GitHubRepoStatus] = []
         await withTaskGroup(of: GitHubRepoStatus?.self) { group in

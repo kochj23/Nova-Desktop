@@ -94,8 +94,11 @@ struct OpenClawSection: View {
                         .foregroundColor(ModernColors.textSecondary)
                         .padding(.top, 8)
                 }
-                metricRow("Server", monitor.openClaw.memoryServerOnline ? "online" : "offline",
-                          color: monitor.openClaw.memoryServerOnline ? ModernColors.green : ModernColors.statusOffline)
+                metricRow("Backend", "pgvector")
+                metricRow("Redis queue", monitor.openClaw.redisOnline ? (monitor.openClaw.memoryQueueDepth == 0 ? "idle" : "\(monitor.openClaw.memoryQueueDepth) pending") : "offline",
+                          color: monitor.openClaw.redisOnline ? ModernColors.green : ModernColors.statusOffline)
+                metricRow("/search", monitor.openClaw.memorySearchEndpoint ? "available" : "unavailable",
+                          color: monitor.openClaw.memorySearchEndpoint ? ModernColors.green : ModernColors.yellow)
             }
 
             Spacer(minLength: 0)

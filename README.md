@@ -17,59 +17,44 @@ A native macOS dashboard for monitoring and controlling all Nova AI infrastructu
 
 ## Architecture
 
-```
-+----------------------------------------------------------------------+
-|                          Nova Desktop (macOS)                        |
-|                                                                      |
-|  +------------------------+    +----------------------------------+  |
-|  |     NovaMonitor         |    |          ContentView             |  |
-|  |   (Data Aggregator)     |    |  +--------+ +--------+ +------+ |  |
-|  |                         |    |  | Dash-  | | AI     | | Apps | |  |
-|  |  10s service refresh    |    |  | board  | | Svcs   | |      | |  |
-|  |  60s GitHub refresh     |    |  +--------+ +--------+ +------+ |  |
-|  |                         |    |  +--------+ +--------+          |  |
-|  |  Concurrent async probes|    |  | Cron   | | GitHub |          |  |
-|  |  via Swift TaskGroup    |    |  | Jobs   | |        |          |  |
-|  +-----------+-------------+    |  +--------+ +--------+          |  |
-|              |                  +-----------------+----------------+  |
-|              |                                    |                   |
-|  +-----------v-------------+    +-----------------v----------------+  |
-|  |   ServiceController      |    |         ModernDesign             |  |
-|  |  (Start / Stop / Restart)|    |  GlassCard, StatusDot, Gauges,  |  |
-|  |  launchApp / killApp     |    |  FloatingBlob, ControlButton,   |  |
-|  |  shell / openURL         |    |  LatencyBadge, SectionHeader    |  |
-|  +-----------+-------------+    +----------------------------------+  |
-|              |                                                       |
-|  +-----------v-------------------------------------------------+     |
-|  |               NovaAPIServer (NWListener :37450)              |     |
-|  |  GET  /api/status    -- overall health summary               |     |
-|  |  GET  /api/health    -- per-service pass/fail                |     |
-|  |  GET  /api/services  -- all service states + latency         |     |
-|  |  GET  /api/crons     -- cron job list                        |     |
-|  |  GET  /api/github    -- GitHub repo summaries                |     |
-|  |  POST /api/refresh   -- trigger manual refresh               |     |
-|  +--------------------------------------------------------------+     |
-+----------------------------------------------------------------------+
-                              |
-             Probes (HTTP + CLI + TCP)
-                              |
-    +------+------+------+----+----+------+------+------+------+
-    |      |      |      |        |      |      |      |      |
-    v      v      v      v        v      v      v      v      v
- OpenClaw Ollama  MLX   Open    Tiny   Swarm  Comfy  Redis  Nova-
- Gateway        Code   WebUI   Chat   UI     UI            NextGen
- :18789  :11434 :37422 :3000   :5000  :7801  :8188  :6379  :34750
-    |
-    +--- Memory Server :18790
-    +--- Cron jobs (openclaw CLI)
-    +--- Slack connectivity
+```mermaid
+graph TB
+    subgraph Nova Desktop
+        App[Nova-DesktopApp] --> Monitor[NovaMonitor<br/>10s services / 60s GitHub]
+        App --> API[NovaAPIServer<br/>NWListener :37450]
+        App --> Views[ContentView<br/>5-Tab Dashboard]
+        Monitor --> SC[ServiceController<br/>Start/Stop/Restart]
+        Views --> Design[ModernDesign<br/>GlassCard / Gauges / Blobs]
+    end
 
-    +-------+-------+-------+-------+-------+-------+
-    |       |       |       |       |       |       |
-    v       v       v       v       v       v       v
- Nova    NMAP     One    Rsync   Jira    Mail    GitHub
- Control Scanner  OnOne  GUI    Summary Summary  API
- :37400  :37423  :37421  :37424 :37425  :37430
+    subgraph AI Services
+        Monitor -->|HTTP probe| OC[OpenClaw :18789]
+        Monitor -->|HTTP probe| OL[Ollama :11434]
+        Monitor -->|HTTP probe| MLX[MLX Code :37422]
+        Monitor -->|HTTP probe| OW[Open WebUI :3000]
+        Monitor -->|HTTP probe| TC[TinyChat :5000]
+        Monitor -->|HTTP probe| SW[SwarmUI :7801]
+        Monitor -->|HTTP probe| CU[ComfyUI :8188]
+        Monitor -->|TCP/CLI| RD[Redis :6379]
+        Monitor -->|HTTP probe| NG[Nova-NextGen :34750]
+    end
+
+    subgraph Apps
+        Monitor -->|HTTP probe| NC[NovaControl :37400]
+        Monitor -->|HTTP probe| NM[NMAPScanner :37423]
+        Monitor -->|HTTP probe| OO[OneOnOne :37421]
+        Monitor -->|HTTP probe| RG[RsyncGUI :37424]
+    end
+
+    subgraph External
+        Monitor -->|REST API| GH[GitHub API]
+        OC --> MS[Memory Server :18790]
+        OC --> SL[Slack]
+    end
+
+    style App fill:#5535ff,color:#fff
+    style API fill:#2a6,color:#fff
+    style Monitor fill:#38d,color:#fff
 ```
 
 ---
@@ -297,7 +282,39 @@ Nova-Desktop/
 
 ---
 
+## Testing
+
+Nova Desktop includes 35 unit tests across three test suites covering models, design system logic, and security compliance.
+
+### Test Suites
+
+| Suite | Tests | Coverage |
+|---|---|---|
+| `ServiceModelsTests` | 12 | All model types: ServiceState, MonitoredService, OpenClawStatus, CronJobStatus, GitHubRepoStatus, NovaActivityStatus, SystemStats, OllamaModel |
+| `DesignSystemTests` | 13 | ModernColors status mapping, heat-map color thresholds (0/30/60/80/100%), boundary conditions |
+| `SecurityTests` | 10 | Loopback binding port, credential scan (5 patterns across all source files), shell injection prevention, entitlements validation, Keychain token loading, Slack config file loading |
+
+### Run Tests
+
+```bash
+cd Nova-Desktop
+xcodegen generate
+xcodebuild test -scheme Nova-Desktop -destination 'platform=macOS'
+```
+
+### Security Test Coverage
+
+- Source files scanned for hardcoded API keys (sk-, AKIA, ghp_, xoxb-, xoxp-)
+- Bundle IDs verified free of shell metacharacters
+- GitHub token confirmed loaded from macOS Keychain
+- Slack token confirmed loaded from OpenClaw config
+- Entitlements confirmed: sandbox disabled for system access
+
+---
+
 ## License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 MIT License -- see [LICENSE](LICENSE).
 

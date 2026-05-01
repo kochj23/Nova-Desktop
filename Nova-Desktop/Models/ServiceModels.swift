@@ -48,6 +48,10 @@ struct OpenClawStatus {
     var uptimeSeconds: Int = 0
     var cronJobs: [CronJobStatus] = []
     var lastUpdated: Date = Date()
+    var memoryBackend: String = "postgresql+pgvector"
+    var redisOnline: Bool = false
+    var memoryQueueDepth: Int = 0
+    var memorySearchEndpoint: Bool = false
 }
 
 struct CronJobStatus: Identifiable {

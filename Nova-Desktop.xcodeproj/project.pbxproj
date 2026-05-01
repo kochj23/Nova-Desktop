@@ -9,20 +9,34 @@
 /* Begin PBXBuildFile section */
 		095A8E5A8049E9A8EEF38A73 /* NovaAPIServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F6567C4A3A384945336ACD /* NovaAPIServer.swift */; };
 		10D9389B59C05A4755DD393F /* NovaMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F376A206504A75E2ECADB /* NovaMonitor.swift */; };
+		1693014847937BD8895A2575 /* SecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2345FC18532F4215C8BBBE8 /* SecurityTests.swift */; };
 		2B7AD09062446CF3C384CD42 /* OpenClawSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D345BF31545C4197D7C89F /* OpenClawSection.swift */; };
 		49C9BFF87CE08E591F13ADDE /* ServiceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A520257B4861B2BBDBC3E1 /* ServiceCard.swift */; };
 		4BC037E4280318B7512D7894 /* ServiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C8193D5F7449F6F194B418 /* ServiceController.swift */; };
 		4D1C6850542C0838BCBC4C86 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D75D5E09B1CC6BAD6A392C6 /* ContentView.swift */; };
 		7FF10A9E617144016DF48557 /* SystemSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7930AAB383815AA31D2D3CAA /* SystemSection.swift */; };
+		82F20BB8DFE46058584683A0 /* ServiceModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFC3672BD0CDA7233BCDCD6 /* ServiceModelsTests.swift */; };
 		8647625A6B47C2AA8D8B26CA /* AppsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36728C453911A2515D60A935 /* AppsSection.swift */; };
 		8855D886A89E075E94341688 /* ServiceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F286086DC05A8BDC4BA3AB /* ServiceModels.swift */; };
 		8F6D2C548C412D10ABA38D5D /* ModernDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3F5F7A86B9B56358AE8437 /* ModernDesign.swift */; };
 		B1A839F834501F49EE24AB0B /* Nova-DesktopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B729361E6F988641C8A301B /* Nova-DesktopApp.swift */; };
 		C5740143B07FED48589E9E0D /* AIServicesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64ACD819BDCCD4620EDE676 /* AIServicesSection.swift */; };
+		C93C0EB4A4A7490B384D371A /* DesignSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41E76ACB26D49F08BDC0B2E /* DesignSystemTests.swift */; };
 		FF666202BA5959E4874191F5 /* GitHubSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF9927ACFECE48B0DA25B46 /* GitHubSection.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		16852DD767B8111C104B0943 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44BBC495FE759C6CA2BCBD48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 702E602D52C7D4A388564ED5;
+			remoteInfo = "Nova-Desktop";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		18B681B2FFBE663497ECB245 /* Nova-DesktopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Nova-DesktopTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		21F286086DC05A8BDC4BA3AB /* ServiceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceModels.swift; sourceTree = "<group>"; };
 		2BF9927ACFECE48B0DA25B46 /* GitHubSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSection.swift; sourceTree = "<group>"; };
 		36728C453911A2515D60A935 /* AppsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsSection.swift; sourceTree = "<group>"; };
@@ -36,7 +50,10 @@
 		A3F6567C4A3A384945336ACD /* NovaAPIServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaAPIServer.swift; sourceTree = "<group>"; };
 		BF3F5F7A86B9B56358AE8437 /* ModernDesign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernDesign.swift; sourceTree = "<group>"; };
 		C64ACD819BDCCD4620EDE676 /* AIServicesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIServicesSection.swift; sourceTree = "<group>"; };
+		D41E76ACB26D49F08BDC0B2E /* DesignSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystemTests.swift; sourceTree = "<group>"; };
 		DE0F376A206504A75E2ECADB /* NovaMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaMonitor.swift; sourceTree = "<group>"; };
+		E2345FC18532F4215C8BBBE8 /* SecurityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityTests.swift; sourceTree = "<group>"; };
+		FBFC3672BD0CDA7233BCDCD6 /* ServiceModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceModelsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -67,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				64A91482547FFD2099B4E16F /* Nova-Desktop.app */,
+				18B681B2FFBE663497ECB245 /* Nova-DesktopTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -79,10 +97,21 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		4323BE88A5962D85FB183B44 /* Nova-DesktopTests */ = {
+			isa = PBXGroup;
+			children = (
+				D41E76ACB26D49F08BDC0B2E /* DesignSystemTests.swift */,
+				E2345FC18532F4215C8BBBE8 /* SecurityTests.swift */,
+				FBFC3672BD0CDA7233BCDCD6 /* ServiceModelsTests.swift */,
+			);
+			path = "Nova-DesktopTests";
+			sourceTree = "<group>";
+		};
 		804348B59E4DD4AE609BE4E5 = {
 			isa = PBXGroup;
 			children = (
 				13A5CF1021F09DCA753A7A2B /* Nova-Desktop */,
+				4323BE88A5962D85FB183B44 /* Nova-DesktopTests */,
 				30DD6C33323662392AEACADF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,6 +164,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		28209C81B0B32162EBB7919A /* Nova-DesktopTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14266330E1DF26C287540F97 /* Build configuration list for PBXNativeTarget "Nova-DesktopTests" */;
+			buildPhases = (
+				35746DEE2CE1FEEA359C499C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66DEB31FC35A5629876F2F4D /* PBXTargetDependency */,
+			);
+			name = "Nova-DesktopTests";
+			packageProductDependencies = (
+			);
+			productName = "Nova-DesktopTests";
+			productReference = 18B681B2FFBE663497ECB245 /* Nova-DesktopTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		702E602D52C7D4A388564ED5 /* Nova-Desktop */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 336495D653C81FBE13880541 /* Build configuration list for PBXNativeTarget "Nova-Desktop" */;
@@ -168,7 +215,6 @@
 				};
 			};
 			buildConfigurationList = E10B893899BE2686EF9CE39F /* Build configuration list for PBXProject "Nova-Desktop" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -178,15 +224,27 @@
 			mainGroup = 804348B59E4DD4AE609BE4E5;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 30DD6C33323662392AEACADF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				702E602D52C7D4A388564ED5 /* Nova-Desktop */,
+				28209C81B0B32162EBB7919A /* Nova-DesktopTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		35746DEE2CE1FEEA359C499C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C93C0EB4A4A7490B384D371A /* DesignSystemTests.swift in Sources */,
+				1693014847937BD8895A2575 /* SecurityTests.swift in Sources */,
+				82F20BB8DFE46058584683A0 /* ServiceModelsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B78024FEB67D612457A44928 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -208,6 +266,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		66DEB31FC35A5629876F2F4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 702E602D52C7D4A388564ED5 /* Nova-Desktop */;
+			targetProxy = 16852DD767B8111C104B0943 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		07E9D59184FC10B190368C69 /* Debug */ = {
@@ -270,6 +336,24 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		296DD17762080E181B96FDA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_IDENTIFIER = "net.digitalnoise.Nova-DesktopTests";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.digitalnoise.Nova-DesktopTests";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nova-Desktop.app/Contents/MacOS/Nova-Desktop";
 			};
 			name = Debug;
 		};
@@ -381,9 +465,36 @@
 			};
 			name = Debug;
 		};
+		8B3A466DF1A7755FFE886529 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_IDENTIFIER = "net.digitalnoise.Nova-DesktopTests";
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.digitalnoise.Nova-DesktopTests";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nova-Desktop.app/Contents/MacOS/Nova-Desktop";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		14266330E1DF26C287540F97 /* Build configuration list for PBXNativeTarget "Nova-DesktopTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				296DD17762080E181B96FDA8 /* Debug */,
+				8B3A466DF1A7755FFE886529 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		336495D653C81FBE13880541 /* Build configuration list for PBXNativeTarget "Nova-Desktop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
