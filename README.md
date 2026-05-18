@@ -62,7 +62,7 @@ Probes every registered service on a 10-second interval using concurrent Swift a
 
 **OpenClaw Core:**
 - Gateway health, version, active sessions, current model
-- Memory server: PostgreSQL+pgvector backend, 1.48M memory count, queue depth
+- Memory server: PostgreSQL+pgvector backend, 1.22M memory count (409 domains), queue depth
 - Redis queue status
 - Slack / Discord / Signal connectivity
 
