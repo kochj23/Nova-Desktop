@@ -39,7 +39,15 @@ final class NovaAPIServer {
             let lines = raw.components(separatedBy: "\r\n")
             guard let parts = lines.first?.split(separator: " "), parts.count >= 2 else { c.cancel(); return }
             let method = String(parts[0]); let path = String(parts[1]).components(separatedBy: "?").first ?? "/"
-            if method == "OPTIONS" { self.send(c, 200, "{}"); return }
+            // Loopback-only API: reject any request whose Host header is not 127.0.0.1/localhost.
+            // This blocks DNS-rebinding, where a website resolves an attacker domain to 127.0.0.1
+            // and drives this server — the forged request still carries the attacker's Host header.
+            let host = lines.first(where: { $0.lowercased().hasPrefix("host:") })
+                .map { String($0.dropFirst("host:".count)).trimmingCharacters(in: .whitespaces) } ?? ""
+            let hostName = host.split(separator: ":").first.map(String.init) ?? host
+            guard hostName == "127.0.0.1" || hostName == "localhost" else {
+                self.send(c, 403, "{\"error\":\"forbidden\"}"); return
+            }
             Task { @MainActor in self.route(method, path, c) }
         }
     }
@@ -115,8 +123,11 @@ final class NovaAPIServer {
         return str
     }
     private func send(_ c: NWConnection, _ status: Int, _ body: String) {
-        let st = [200:"OK",201:"Created",207:"Multi-Status",400:"Bad Request",404:"Not Found"][status] ?? "Unknown"
-        let response = "HTTP/1.1 \(status) \(st)\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\nAccess-Control-Allow-Origin: *\r\nConnection: close\r\n\r\n\(body)"
+        let st = [200:"OK",201:"Created",207:"Multi-Status",400:"Bad Request",403:"Forbidden",404:"Not Found"][status] ?? "Unknown"
+        // No Access-Control-Allow-Origin: this is a loopback-only API for native Nova clients,
+        // which ignore CORS. A wildcard ACAO would let any website the user visits read these
+        // responses (github/repo/service data). Omitting it stops cross-origin browser reads.
+        let response = "HTTP/1.1 \(status) \(st)\r\nContent-Type: application/json; charset=utf-8\r\nContent-Length: \(body.utf8.count)\r\nConnection: close\r\n\r\n\(body)"
         c.send(content: response.data(using: .utf8), completion: .contentProcessed { _ in c.cancel() })
     }
 }
